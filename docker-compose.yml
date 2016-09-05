@@ -1,0 +1,38 @@
+version: '2'
+services:
+  rabbitmq:
+    image: rabbitmq
+    ports:
+     - "4369:4369"
+     - "5671:5671"
+     - "5672:5672"
+     - "25672:25672"
+    environment:
+     - RABBITMQ_DEFAULT_USER=cisco
+     - RABBITMQ_DEFAULT_PASS=C1sco123
+  vendingmachine:
+    build:
+      context: ./vendingMachine
+      dockerfile: ./Dockerfile
+    command: /usr/local/bin/python2.7 /usr/src/vendingMachine.py
+    links:
+      - rabbitmq
+    environment:
+     - RABBITMQ_DEFAULT_USER=cisco
+     - RABBITMQ_DEFAULT_PASS=C1sco123
+     - RABBITMQ_HOST=rabbitmq
+     - RABBITMQ_QUEUE=HackZurich16
+     - DELAY=1
+  demolistener:
+    build:
+      context: ./demoListener
+      dockerfile: ./Dockerfile
+    command: /usr/local/bin/python2.7 /usr/src/demoListener.py
+    links:
+      - rabbitmq
+    environment:
+     - RABBITMQ_DEFAULT_USER=cisco
+     - RABBITMQ_DEFAULT_PASS=C1sco123
+     - RABBITMQ_HOST=rabbitmq
+     - RABBITMQ_QUEUE=HackZurich16
+

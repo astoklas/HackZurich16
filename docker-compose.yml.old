@@ -1,0 +1,62 @@
+version: '2'
+services:
+  rabbitmq:
+    image: rabbitmq
+    ports:
+     - "4369:4369"
+     - "5671:5671"
+     - "5672:5672"
+     - "25672:25672"
+    environment:
+     - RABBITMQ_DEFAULT_USER=cisco
+     - RABBITMQ_DEFAULT_PASS=C1sco123
+    networks:
+     - default
+  influxdb:
+    image: influxdb
+    ports:
+     - "8083:8083"
+     - "8086:8086"
+    volumes:
+     - $PWD:/var/lib/influxdb
+    environment:
+     - INFLUXDB_GRAPHITE_ENABLED=true
+    networks:
+     - default
+  grafana:
+    image: grafana/grafana
+    links:
+     - influxdb
+    ports:
+     - "3000:3000"
+    environment:
+     - GF_SECURITY_ADMIN_PASSWORD=C1sco123
+    networks:
+     - default
+  sensor:
+    build: ../test-sensor
+    volumes:
+     - ../test-sensor:/app
+    links:
+     - influxdb
+     - grafana
+     - rabbitmq
+    #entrypoint: "/bin/bash /app/wait-for-it.sh rabbitmq:5671"
+    environment:
+     - HOST_RABBITMQ=192.168.99.100
+    networks:
+     - default
+  receiver:
+    build: ../test-receiver
+    volumes:
+     - ../test-receiver:/app
+    links:
+     - influxdb
+     - grafana
+     - rabbitmq
+    entrypoint: "/bin/bash /app/wait-for-it.sh rabbitmq:5671"
+    environment:
+     - HOST_RABBITMQ=192.168.99.100
+     - HOST_INFLUXDB=192.168.99.100
+    networks:
+     - default
