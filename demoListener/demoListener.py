@@ -24,6 +24,8 @@ channel.queue_declare(queue=queue)
 
 def callback(ch, method, properties, body):
     print(" [x] Received Message with length of %r" % len(body))
+    jdata = json.loads(body)
+    print json.dumps(jdata, indent=4, sort_keys=True)
 
 channel.basic_consume(callback,queue=queue,no_ack=True)
 

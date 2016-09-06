@@ -23,4 +23,16 @@ services:
      - RABBITMQ_HOST=rabbitmq
      - RABBITMQ_QUEUE=HackZurich16
      - DELAY=1
+  demolistener:
+    build:
+      context: ./demoListener
+      dockerfile: ./Dockerfile
+    command: /usr/local/bin/python2.7 /usr/src/demoListener.py
+    links:
+      - rabbitmq
+    environment:
+     - RABBITMQ_DEFAULT_USER=cisco
+     - RABBITMQ_DEFAULT_PASS=C1sco123
+     - RABBITMQ_HOST=rabbitmq
+     - RABBITMQ_QUEUE=HackZurich16
 
