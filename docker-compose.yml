@@ -10,11 +10,11 @@ services:
     environment:
      - RABBITMQ_DEFAULT_USER=cisco
      - RABBITMQ_DEFAULT_PASS=C1sco123
-  vendingmachine:
+  vendingmachineAPI:
     build:
-      context: ./vendingMachine
+      context: ./vendingMachineAPI
       dockerfile: ./Dockerfile
-    command: /usr/local/bin/python2.7 /usr/src/vendingMachine.py
+    command: /usr/local/bin/python2.7 /usr/src/vendingMachineAPI.py
     links:
       - rabbitmq
     environment:
@@ -23,4 +23,7 @@ services:
      - RABBITMQ_HOST=rabbitmq
      - RABBITMQ_QUEUE=HackZurich16
      - DELAY=1
+     - PORT=5000
+    ports:
+     - "5001:5001"
 
