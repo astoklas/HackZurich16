@@ -62,8 +62,8 @@ class Machine:
                 self.value[i] = 0
             self.myData['data'].append(self.valStruct(self.value[i], id=i, type='level', unit="%", description='Supply Fill Level'))
         # Random Value for Tempertatur, Humudity and power
-        self.myData['data'].append(self.valStruct(random.randint(10, 45), description='Environment Temp'))
-        self.myData['data'].append(self.valStruct(random.randint(-5, 15), description='Operational Temp'))
+        self.myData['data'].append(self.valStruct(random.randint(10, 45), type='env_temperatur', description='Environment Temp'))
+        self.myData['data'].append(self.valStruct(random.randint(-5, 15), type='op_temperatur', description='Operational Temp'))
         self.myData['data'].append(self.valStruct(random.randint(0, 100), type='humidity', unit="%", description='Environment Humidity'))
         self.myData['data'].append(self.valStruct(random.randint(300, 1500), type='power', unit="W", description='Power Consumption'))
         return json.dumps(self.myData)
