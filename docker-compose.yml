@@ -10,7 +10,7 @@ services:
     environment:
      - RABBITMQ_DEFAULT_USER=cisco
      - RABBITMQ_DEFAULT_PASS=C1sco123
-  vendingmachineAPI:
+  vendingmachineapi:
     build:
       context: ./vendingMachineAPI
       dockerfile: ./Dockerfile
