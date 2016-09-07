@@ -104,4 +104,4 @@ if __name__ == "__main__":
     connection, channel = connect(host, user, passwd, queue, 10)
     m = Machine(5)
 
-    app.run(port=port)
+    app.run(host="0.0.0.0",port=port)

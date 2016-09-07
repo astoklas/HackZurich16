@@ -42,7 +42,7 @@ class Machine:
     cleancounter = 0
 
     def __init__(self, slots):
-        for i in range(0, slots-1):
+        for i in range(0, slots):
             self.value.append(100)
         self.myData['id'] = str(uuid.uuid4())
         self.nextIteration()
@@ -62,8 +62,8 @@ class Machine:
                 self.value[i] = 0
             self.myData['data'].append(self.valStruct(self.value[i], id=i, type='level', unit="%", description='Supply Fill Level'))
         # Random Value for Tempertatur, Humudity and power
-        self.myData['data'].append(self.valStruct(random.randint(0, 30), description='Environment Temp'))
-        self.myData['data'].append(self.valStruct(random.randint(20, 50), description='Operational Temp'))
+        self.myData['data'].append(self.valStruct(random.randint(10, 45), description='Environment Temp'))
+        self.myData['data'].append(self.valStruct(random.randint(-5, 15), description='Operational Temp'))
         self.myData['data'].append(self.valStruct(random.randint(0, 100), type='humidity', unit="%", description='Environment Humidity'))
         self.myData['data'].append(self.valStruct(random.randint(300, 1500), type='power', unit="W", description='Power Consumption'))
         return json.dumps(self.myData)
