@@ -9,29 +9,52 @@ import os
 app = Flask(__name__)
 
 mycounter = 0
+apsched = BackgroundScheduler()
 
 
 @app.before_first_request
 def initialize():
-    apsched = BackgroundScheduler()
     apsched.add_job(background_loop, 'interval', seconds=delay)
     apsched.start()
 
 @app.route("/")
 def root():
-    return "Vending Machine Simulator API\nCounter %i\n%s" % (mycounter,m.retriveValue())
+    return m.retriveValue(), 200, {'Content-Type': 'application/json'}
+
+@app.route("/help")
+def help():
+    return "Vending Machine Simulator API\nCounter %i\n%s" % (mycounter,m.retriveValue()), 200, {'Content-Type': 'application/json'}
+
 
 @app.route("/refill")
 def refill():
-    return "Refilled everything"
+    m.refill()
+    return "Refilled everything", 200, {'Content-Type': 'application/json'}
 
 @app.route("/clean")
 def clean():
-    return "Everything clean and shiny now"
+    m.clean()
+    return "Everything clean and shiny now", 200, {'Content-Type': 'application/json'}
+
+@app.route("/reset")
+def reset():
+    return "Not impemented; Everything reset and shiny now", 200, {'Content-Type': 'application/json'}
 
 @app.route("/security")
 def security():
-    return "All Security Events cleared"
+    return "Not impemented; All Security Events cleared", 200, {'Content-Type': 'application/json'}
+
+@app.route("/suspend")
+def suspend():
+    apsched.pause()
+    msg = "Suspended generation of events"
+    return msg , 200, {'Content-Type': 'application/json'}
+
+
+@app.route("/resume")
+def resume():
+    apsched.resume()
+    return "Resumed generation of events", 200, {'Content-Type': 'application/json'}
 
 
 if __name__ == "__main__":
@@ -66,6 +89,7 @@ if __name__ == "__main__":
     user = os.environ.get('RABBITMQ_DEFAULT_USER', "cisco")
     passwd = os.environ.get('RABBITMQ_DEFAULT_PASS', "C1sco123")
     queue = os.environ.get('RABBITMQ_QUEUE', "HackZurich16")
+    port = int(os.environ.get('PORT', '5000'))
     print "##################################"
     print "# Starting Machine Simulator     #"
     print "# (c) 2016 Cisco                 #"
@@ -74,9 +98,10 @@ if __name__ == "__main__":
     print "# User: %s #" % (user.ljust(24))
     print "# Password: %s #" % (passwd.ljust(20))
     print "# Delay: %s #" % (os.environ.get('DELAY', '2').ljust(23))
+    print "# Port: %s #" % (os.environ.get('DELAY', '2').ljust(24))
     print "##################################"
     time.sleep(2)
     connection, channel = connect(host, user, passwd, queue, 10)
     m = Machine(5)
 
-    app.run()
+    app.run(port=port)
