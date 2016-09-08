@@ -23,6 +23,8 @@ def root():
 
 @app.route("/help")
 def help():
+    print "Giving Help, similar to /stats"
+    print m.statistics()
     return "Vending Machine Simulator API\nCounter %i\n%s" % (mycounter,m.statistics()), 200, {'Content-Type': 'application/json'}
 
 

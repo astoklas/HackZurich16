@@ -38,13 +38,15 @@ class Machine:
 
     value = []
     lookup = [0, 1, 0, 1, 2, 3, 0, 5]
-    myData = {'id': '', 'type': 'vendingmachine', 'timestamp': time.time(),'cleancounter' : '', 'data': []}
+    myData = {'id': '', 'type': 'vendingmachine', 'timestamp': time.strftime("%d/%m/%Y-%X %Z"),'msgcounter' : '', 'data': []}
     msgcounter = 0
     lastreset = None
     lastclean = None
     starttime = None
     resetcount = 0
     cleancount = 0
+    fillcount = 0
+    lastfill = None
 
 
     def __init__(self, slots):
@@ -56,6 +58,8 @@ class Machine:
         self.starttime = time.strftime("%d/%m/%Y-%X %Z")
         self.lastreset = time.strftime("%d/%m/%Y-%X %Z")
         self.lastclean = time.strftime("%d/%m/%Y-%X %Z")
+        self.lastfill = time.strftime("%d/%m/%Y-%X %Z")
+        print self.myData
 
     def retriveValue(self):
         return json.dumps(self.myData, indent=2)
@@ -63,7 +67,7 @@ class Machine:
     def nextIteration(self):
         self.msgcounter = self.msgcounter + 1
         # Setting a time stamp
-        self.myData['timestamp'] = time.time()
+        self.myData['timestamp'] = time.strftime("%d/%m/%Y-%X %Z")
         self.myData['msgcounter'] = self.msgcounter
         self.myData['data'] = []
         for i in range(0, len(self.value)):
@@ -84,6 +88,8 @@ class Machine:
     def refill(self):
         for i in range(0,len(self.value)):
             self.value[i] = 100
+        self.fillcount = self.fillcount + 1
+        self.lastfill = time.strftime("%d/%m/%Y-%X %Z")
         return
 
     def clean(self):
@@ -100,9 +106,8 @@ class Machine:
         return
 
     def statistics(self):
-        msg = {"id": self.myData['id'],"start": self.starttime, "msg": self.msgcount, "lastreset":  self.lastreset, "resetcount": self.resetcount ,"lastclean":  self.lastclean,"cleancount": self.cleancount}
-        print msg
-        return msg
+        stats = { "id" : self.myData['id'], "start": self.starttime, "msgcount" : self.msgcounter, "lastreset":  self.lastreset, "resetcount": self.resetcount ,"lastclean":  self.lastclean,"cleancount": self.cleancount, "lastfill": self.lastfill, "fillcount": self.fillcount }
+        return json.dumps(stats)
     #
     # With a little helper from my friends to write values in the json struct
     #
