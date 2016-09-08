@@ -23,7 +23,7 @@ def root():
 
 @app.route("/help")
 def help():
-    return "Vending Machine Simulator API\nCounter %i\n%s" % (mycounter,m.retriveValue()), 200, {'Content-Type': 'application/json'}
+    return "Vending Machine Simulator API\nCounter %i\n%s" % (mycounter,m.statistics()), 200, {'Content-Type': 'application/json'}
 
 
 @app.route("/refill")
@@ -35,6 +35,11 @@ def refill():
 def clean():
     m.clean()
     return "Everything clean and shiny now", 200, {'Content-Type': 'application/json'}
+
+@app.route("/stats")
+def stats():
+    result = m.statistics()
+    return result, 200, {'Content-Type': 'application/json'}
 
 @app.route("/reset")
 def reset():

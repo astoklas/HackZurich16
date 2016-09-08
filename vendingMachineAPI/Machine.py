@@ -39,22 +39,32 @@ class Machine:
     value = []
     lookup = [0, 1, 0, 1, 2, 3, 0, 5]
     myData = {'id': '', 'type': 'vendingmachine', 'timestamp': time.time(),'cleancounter' : '', 'data': []}
-    cleancounter = 0
+    msgcounter = 0
+    lastreset = None
+    lastclean = None
+    starttime = None
+    resetcount = 0
+    cleancount = 0
+
 
     def __init__(self, slots):
         for i in range(0, slots):
             self.value.append(100)
         self.myData['id'] = str(uuid.uuid4())
         self.nextIteration()
+        self.msgcounter = 0
+        self.starttime = time.strftime("%d/%m/%Y-%X %Z")
+        self.lastreset = time.strftime("%d/%m/%Y-%X %Z")
+        self.lastclean = time.strftime("%d/%m/%Y-%X %Z")
 
     def retriveValue(self):
         return json.dumps(self.myData, indent=2)
 
     def nextIteration(self):
-        self.cleancounter = self.cleancounter + 1
+        self.msgcounter = self.msgcounter + 1
         # Setting a time stamp
         self.myData['timestamp'] = time.time()
-        self.myData['cleancounter'] = self.cleancounter
+        self.myData['msgcounter'] = self.msgcounter
         self.myData['data'] = []
         for i in range(0, len(self.value)):
             self.value[i] = self.value[i] - self.lookup[random.randint(0, len(self.lookup)-1)]
@@ -76,14 +86,23 @@ class Machine:
             self.value[i] = 100
         return
 
-    def celan(self):
-        self.cleancounter = 0
+    def clean(self):
+        self.lastclean = time.time()
+        self.cleancount = self.cleancount + 1
         return
 
     def reset(self):
-        self.cleancounter = 0
+        self.msgcounter = 0
         self.refill(self)
+        self.clean(self)
+        self.lastreset = time.strftime("%d/%m/%Y-%X %Z")
+        self.resetcount = self.resetcount + 1
+        return
 
+    def statistics(self):
+        msg = {"id": self.myData['id'],"start": self.starttime, "msg": self.msgcount, "lastreset":  self.lastreset, "resetcount": self.resetcount ,"lastclean":  self.lastclean,"cleancount": self.cleancount}
+        print msg
+        return msg
     #
     # With a little helper from my friends to write values in the json struct
     #
