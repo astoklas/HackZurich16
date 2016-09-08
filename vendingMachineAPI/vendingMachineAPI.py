@@ -45,7 +45,8 @@ def stats():
 
 @app.route("/reset")
 def reset():
-    return "Not impemented; Everything reset and shiny now", 200, {'Content-Type': 'application/json'}
+    m.reset()
+    return "Reset machine", 200, {'Content-Type': 'application/json'}
 
 @app.route("/security")
 def security():
