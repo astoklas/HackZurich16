@@ -93,7 +93,7 @@ class Machine:
         return
 
     def clean(self):
-        self.lastclean = time.time()
+        self.lastclean = time.strftime("%d/%m/%Y-%X %Z")
         self.cleancount = self.cleancount + 1
         return
 
