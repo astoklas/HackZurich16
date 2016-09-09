@@ -5,11 +5,12 @@ services:
     ports:
      - "4369:4369"
      - "5671:5671"
-     - "5672:5672"
+     - "15001:5672"
      - "25672:25672"
     environment:
      - RABBITMQ_DEFAULT_USER=cisco
      - RABBITMQ_DEFAULT_PASS=C1sco123
+    network_mode: bridge
   vendingmachineapi:
     build:
       context: ./vendingMachineAPI
@@ -21,9 +22,12 @@ services:
      - RABBITMQ_DEFAULT_USER=cisco
      - RABBITMQ_DEFAULT_PASS=C1sco123
      - RABBITMQ_HOST=rabbitmq
+     - RABBITMQ_PORT=15001
      - RABBITMQ_QUEUE=HackZurich16
      - DELAY=2
      - PORT=5000
     ports:
      - "5000:5000"
+    network_mode: bridge
+
 
