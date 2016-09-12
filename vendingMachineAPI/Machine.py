@@ -99,8 +99,8 @@ class Machine:
 
     def reset(self):
         self.msgcounter = 0
-        self.refill(self)
-        self.clean(self)
+        self.refill()
+        self.clean()
         self.lastreset = time.strftime("%d/%m/%Y-%X %Z")
         self.resetcount = self.resetcount + 1
         return
