@@ -1,6 +1,7 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask
 from flask import request
+from flask import jsonify
 from Machine import Machine
 import pika
 import time
@@ -32,38 +33,47 @@ def help():
 @app.route("/refill")
 def refill():
     m.refill()
-    return "Refilled everything", 200, {'Content-Type': 'application/json'}
+    retval = {"status": "Refilled everything"}
+    #return "Refilled everything", 200, {'Content-Type': 'application/json'}
+    return jsonify(**retval)
 
 @app.route("/clean")
 def clean():
     m.clean()
-    return "Everything clean and shiny now", 200, {'Content-Type': 'application/json'}
+    #return "Everything clean and shiny now", 200, {'Content-Type': 'application/json'}
+    retval = {"status": "Everything clean and shiny now"}
+    return jsonify(**retval)
+
 
 @app.route("/stats")
 def stats():
     result = m.statistics()
     return result, 200, {'Content-Type': 'application/json'}
 
+
 @app.route("/reset")
 def myreset():
     m.resetmachine()
-    return "Reset machine", 200, {'Content-Type': 'application/json'}
+    #return "Reset machine", 200, {'Content-Type': 'application/json'}
+    retval = {"status": "Reset done"}
+    return jsonify(**retval)
 
-@app.route("/security")
-def security():
-    return "Not impemented; All Security Events cleared", 200, {'Content-Type': 'application/json'}
 
 @app.route("/suspend")
 def suspend():
     apsched.pause()
     msg = "Suspended generation of events"
-    return msg , 200, {'Content-Type': 'application/json'}
+    #return msg , 200, {'Content-Type': 'application/json'}
+    retval = {"status": "Suspended generation of events"}
+    return jsonify(**retval)
 
 
 @app.route("/resume")
 def resume():
     apsched.resume()
-    return "Resumed generation of events", 200, {'Content-Type': 'application/json'}
+    #return "Resumed generation of events", 200, {'Content-Type': 'application/json'}
+    retval = {"status": "Resumed generation of events"}
+    return jsonify(**retval)
 
 if __name__ == "__main__":
 
