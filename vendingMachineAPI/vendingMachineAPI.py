@@ -45,8 +45,8 @@ def stats():
     return result, 200, {'Content-Type': 'application/json'}
 
 @app.route("/reset")
-def reset():
-    m.reset()
+def myreset():
+    m.resetmachine()
     return "Reset machine", 200, {'Content-Type': 'application/json'}
 
 @app.route("/security")

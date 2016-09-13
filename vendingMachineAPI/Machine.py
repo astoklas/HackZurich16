@@ -97,7 +97,7 @@ class Machine:
         self.cleancount = self.cleancount + 1
         return
 
-    def reset(self):
+    def resetmachine(self):
         self.msgcounter = 0
         self.refill()
         self.clean()
