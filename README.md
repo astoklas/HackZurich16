@@ -4,6 +4,9 @@ This is a simple simulator of a vending machine which has a set of goods (100 un
 Data is pushed to a rabbitmq
 
 ## Get started
+
+###update Code: Change to the subdirectory HackZurich16 and perform git pull. Instruction to connect to the environment are provided speratly.
+
 Quick way: 
 docker-compose build
 docker-cmopose up
